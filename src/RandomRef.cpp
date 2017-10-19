@@ -10,9 +10,9 @@ RandomRef::~RandomRef()
     //dtor
 }
 
-std::vector<Page> RandomRef::chooseReferenceAlog(int rang, int length){
-    std::vector<Page> refStringVec;
-    refStringVec.reserve(length);
+std::deque<Page> RandomRef::chooseReferenceAlgo(int rang, int length){
+    std::deque<Page> refStringVec;
+    //refStringVec.reserve(length);
 
     srand(1000);
 

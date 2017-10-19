@@ -1,12 +1,13 @@
 #ifndef PRA_INTERFACE_H
 #define PRA_INTERFACE_H
 
+template<class T>
 class PRA_Interface
 {
     public:
 
-        static const int historyRefStringVecSize = 30;
-        static const int refStringVecSize = 10;
+        static const int refStringQueSize = 10;
+        static const int historyRefStringQueSize = refStringQueSize * 3;
 
         // return interrupt times
         int getInterruptTimes();
@@ -25,7 +26,7 @@ class PRA_Interface
         virtual void callOSEvent() = 0;
 
         // the event causing page fault happended. pageFault++
-        virtual void pageFaultEvent() = 0;
+        virtual void pageFaultEvent(T) = 0;
 
         // the event writting the disk happended. writeDisk++
         virtual void writeDiskEvent() = 0;

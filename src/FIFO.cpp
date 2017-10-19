@@ -1,40 +1,40 @@
 #include "FIFO.h"
 
-FIFO::FIFO(int dramSize, std::vector<Page>* refStringVec, int refTimes){
+FIFO::FIFO(int dramSize, std::deque<Page>* refStringQue, int refTimes){
     PRA_Interface::interrupt = 0;
     PRA_Interface::pageFault = 0;
     PRA_Interface::writeDisk = 0;
 
     this->dramSize = dramSize;
-    this->refStringVec = refStringVec;
+    this->refStringQue = refStringQue;
     this->refTimes = refTimes;
 
-    this->refStringVec_History = new std::vector<Page>();
-    this->refStringVec_History->reserve(this->historyRefStringVecSize);
+    this->refStringQue_History = new std::deque<Page>();
+    //this->refStringVec_History->reserve(this->historyRefStringVecSize);
 
     this->refAlog = new RandomRef();
-    this->dram = new std::vector<Page>();
+    this->dram = new std::deque<Page>();
 }
 
 FIFO::~FIFO(){
-    delete this->refStringVec;
+    delete this->refStringQue;
 }
 
 void FIFO::setDramSize(int dramSize){
     this->dramSize = dramSize;
     if(this->dram == nullptr){
-        this->dram = new std::vector<Page>();
+        this->dram = new std::deque<Page>();
     }
 
     if(!this->dram->empty()){
         this->dram->clear();
     }
 
-    this->dram->reserve(dramSize);
+    //this->dram->reserve(dramSize);
 }
 
-void FIFO::setRefStringVec(std::vector<Page>* refStringVec){
-    this->refStringVec = refStringVec;
+void FIFO::setRefStringQue(std::deque<Page>* refStringQue){
+    this->refStringQue = refStringQue;
 }
 
 void FIFO::setRefTimes(int refTimes){
@@ -43,29 +43,62 @@ void FIFO::setRefTimes(int refTimes){
 
 void FIFO::callOSEvent(){
 
-    if(this->refStringVec_History->size() + PRA_Interface::refStringVecSize > PRA_Interface::historyRefStringVecSize){
-        int num = this->refStringVec_History->size() - PRA_Interface::refStringVecSize;
+    if(this->refStringQue_History->size() + PRA_Interface::refStringQueSize > PRA_Interface::historyRefStringQueSize){
+        int num = this->refStringQue_History->size() - PRA_Interface::refStringQueSize;
 
         for(int i = 0; i < num; i++){
-            this->refStringVec_History->erase(this->refStringVec_History->begin());
+            this->refStringQue_History->pop_front();
         }
     }
 
-    for(unsigned i = 0; i < this->refStringVec->size(); i++){
-        this->refStringVec_History->push_back(this->refStringVec->at(i));
+    for(unsigned i = 0; i < this->refStringQue->size(); i++){
+        this->refStringQue->push_back(this->refStringQue->at(i));
     }
 
-    this->refStringVec->clear();
+    this->refStringQue->clear();
 
-    delete this->refStringVec;
+    delete this->refStringQue;
 
-    std::vector<Page> temp = this->refAlog->chooseReferenceAlog(350, PRA_Interface::refStringVecSize);
-    this->refStringVec = &temp;
+    std::deque<Page> temp = this->refAlog->chooseReferenceAlgo(350, PRA_Interface::refStringQueSize);
+    this->refStringQue = &temp;
 
     PRA_Interface::interrupt++;
 }
 
-void FIFO::pageFaultEvent(){
+void FIFO::pageFaultEvent(Page refString){
+    std::deque<Page>* tempDeque = new std::deque<Page>();
+    tempDeque->assign(this->refStringQue->begin(), this->refStringQue->end());
+
+    bool stopFlag = false;
+    for(std::deque<Page>::reverse_iterator rit = this->refStringQue_History->rbegin(); rit != this->refStringQue_History->rend(); rit++){
+        Page page = *rit;
+
+        for(std::deque<Page>::iterator it = tempDeque->begin(); it!= tempDeque->end(); it++){
+            Page dramPage = *it;
+            if(page.getRefString() == dramPage.getRefString() && tempDeque->size() > 1){
+                tempDeque->erase(it);
+
+                break;
+            }
+            else if(tempDeque->size() == 1){
+                stopFlag = true;
+
+                break;
+            }
+        }
+
+        if(stopFlag){break;}
+    }
+
+    Page victimPage = tempDeque->front();
+    for(std::deque<Page>::iterator it = refStringQue->begin(); it!= refStringQue->end(); it++){
+        Page dramPage = *it;
+
+        if(dramPage.getRefString() == victimPage.getRefString()){
+            dramPage.setRefString(refString.getRefString());
+            dramPage.setDirtyBit(refString.getDirtyBit());
+        }
+    }
 
     PRA_Interface::pageFault++;
 }

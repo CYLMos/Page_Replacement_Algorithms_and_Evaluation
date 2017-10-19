@@ -4,7 +4,7 @@
 #include "TestRef_Interface.h"
 #include "Page.h"
 
-#include <vector>
+#include <deque>
 #include <cstdlib>
 
 
@@ -14,7 +14,7 @@ class RandomRef : public TestRef_Interface
         RandomRef();
         virtual ~RandomRef();
 
-        std::vector<Page> chooseReferenceAlog(int rang, int length) override;
+        std::deque<Page> chooseReferenceAlgo(int rang, int length) override;
 
     protected:
 

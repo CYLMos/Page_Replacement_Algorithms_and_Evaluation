@@ -6,23 +6,24 @@
 #include "Page.h"
 #include "RandomRef.h"
 
-#include <vector>
+#include <deque>
+#include <algorithm>
 
-class FIFO : public PRA_Interface
+class FIFO : public PRA_Interface<Page>
 {
     public:
-        FIFO(int dramSize, std::vector<Page>* refStringVec, int refTimes);
+        FIFO(int dramSize, std::deque<Page>* refStringQue, int refTimes);
         virtual ~FIFO();
 
         void setDramSize(int dramSize);
 
-        void setRefStringVec(std::vector<Page>* refStringVec);
+        void setRefStringQue(std::deque<Page>* refStringQue);
 
         void setRefTimes(int refTimes);
 
         void callOSEvent() override;
 
-        void pageFaultEvent() override;
+        void pageFaultEvent(Page) override;
 
         void writeDiskEvent() override;
 
@@ -32,11 +33,11 @@ class FIFO : public PRA_Interface
 
     private:
         int dramSize;
-        std::vector<Page>* refStringVec = nullptr;
-        std::vector<Page>* refStringVec_History = nullptr;
+        std::deque<Page>* refStringQue = nullptr;
+        std::deque<Page>* refStringQue_History = nullptr;
         int refTimes;
 
-        std::vector<Page>* dram = nullptr;
+        std::deque<Page>* dram = nullptr;
         TestRef_Interface* refAlog = nullptr;
 
         //void

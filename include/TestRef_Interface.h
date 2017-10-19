@@ -3,13 +3,13 @@
 
 #include "Page.h"
 
-#include <vector>
+#include <deque>
 
 
 class TestRef_Interface
 {
     public:
-        virtual std::vector<Page> chooseReferenceAlog(int rang, int length) = 0;
+        virtual std::deque<Page> chooseReferenceAlgo(int rang, int length) = 0;
 
     protected:
 

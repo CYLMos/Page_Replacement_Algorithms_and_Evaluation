@@ -1,16 +1,18 @@
 #include "PRA_Interface.h"
-
-int PRA_Interface::getInterruptTimes()
+template<class T>
+int PRA_Interface<T>::getInterruptTimes()
 {
     return this->interrupt;
 }
 
-int PRA_Interface::getPageFaultTimes()
+template<class T>
+int PRA_Interface<T>::getPageFaultTimes()
 {
     return this->pageFault;
 }
 
-int PRA_Interface::getWriteDiskTimes()
+template<class T>
+int PRA_Interface<T>::getWriteDiskTimes()
 {
     return this->writeDisk;
 }
