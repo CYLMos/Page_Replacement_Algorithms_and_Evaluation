@@ -8,18 +8,33 @@
 
 #include <deque>
 #include <algorithm>
+#include <cstdlib>
+#include <iostream>
 
 class FIFO : public PRA_Interface<Page>
 {
     public:
-        FIFO(int dramSize, std::deque<Page>* refStringQue, int refTimes);
+        FIFO(std::deque<Page>*, TestRef_Interface*);
+        FIFO(TestRef_Interface*);
         virtual ~FIFO();
 
-        void setDramSize(int dramSize);
+        //void setDramSize(int dramSize);
 
-        void setRefStringQue(std::deque<Page>* refStringQue);
+        void setRefStringQue(std::deque<Page>*) override;
 
-        void setRefTimes(int refTimes);
+        std::deque<Page>* getRefStringQue() override;
+
+        void setRefStringQue_History(std::deque<Page>*) override;
+
+        std::deque<Page>* getRefStringQue_History() override;
+
+        void setDram(std::deque<Page>*) override;
+
+        std::deque<Page>* getDram() override;
+
+        void setRefAlog(TestRef_Interface*) override;
+
+        TestRef_Interface* getRefAlog() override;
 
         void callOSEvent() override;
 
@@ -27,20 +42,24 @@ class FIFO : public PRA_Interface<Page>
 
         void writeDiskEvent() override;
 
-        void Run() override;
+        int getInterruptTimes() override;
+
+        int getPageFaultTimes() override;
+
+        int getWriteDiskTimes() override;
 
     protected:
 
     private:
-        int dramSize;
         std::deque<Page>* refStringQue = nullptr;
         std::deque<Page>* refStringQue_History = nullptr;
-        int refTimes;
 
         std::deque<Page>* dram = nullptr;
-        TestRef_Interface* refAlog = nullptr;
+        TestRef_Interface* refAlgo = nullptr;
 
-        //void
+        int interrupt;
+        int pageFault;
+        int writeDisk;
 };
 
 #endif // FIFO_H

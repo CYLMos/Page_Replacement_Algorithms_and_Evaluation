@@ -9,7 +9,7 @@
 class TestRef_Interface
 {
     public:
-        virtual std::deque<Page> chooseReferenceAlgo(int rang, int length) = 0;
+        virtual std::deque<Page>* chooseReferenceAlgo(int rang, int length) = 0;
 
     protected:
 

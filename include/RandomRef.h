@@ -11,14 +11,15 @@
 class RandomRef : public TestRef_Interface
 {
     public:
-        RandomRef();
+        RandomRef(int);
         virtual ~RandomRef();
 
-        std::deque<Page> chooseReferenceAlgo(int rang, int length) override;
+        std::deque<Page>* chooseReferenceAlgo(int rang, int length) override;
 
     protected:
 
     private:
+        int randSeed;
 };
 
 #endif // RANDOMREF_H

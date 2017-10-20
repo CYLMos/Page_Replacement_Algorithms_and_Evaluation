@@ -1,58 +1,27 @@
 #include <iostream>
-#include <deque>
-#include <algorithm>
+#include <time.h>
+
+#include "PRA_Interface.h"
+#include "FIFO.h"
+#include "RandomRef.h"
+#include "PRA.h"
 
 using namespace std;
 
 int main()
 {
-    deque<int>* que = new deque<int>();
-    deque<int>::iterator it;
+    TestRef_Interface* refAlgorithm = new RandomRef(time(nullptr));
+    PRA_Interface<Page>* algorithm = new FIFO(refAlgorithm);
 
-    cout << que->size() << endl;
+    PRA* pra = new PRA(algorithm, 70000);
 
-    for(int i = 0; i < 10; i++){
-        que->push_back(i);
-    }
+    pra->Run();
 
+    cout << "Interrupt: " << pra->getAlgorithm()->getInterruptTimes() << endl;
+    cout << "Page fault: " << pra->getAlgorithm()->getPageFaultTimes() << endl;
+    cout << "Write disk: " << pra->getAlgorithm()->getWriteDiskTimes() << endl;
 
-    cout << que->size() << endl;
-
-    for(it = que->begin(); it != que->end(); it++){
-        cout << *it << " ";
-    }
-
-    cout << endl;
-
-    que->pop_front();
-
-    cout << que->size() << endl;
-
-    for(it = que->begin(); it != que->end(); it++){
-        cout << *it << " ";
-    }
-
-    cout << endl;
-
-    deque<int>* que2 = new deque<int>();
-
-    que2->assign(que->begin(), que->end());
-
-    que->pop_front();
-
-    cout << que2->size() << endl;
-
-    for(deque<int>::reverse_iterator rit = que2->rbegin(); rit != que2->rend(); rit++){
-        cout << *rit << " ";
-    }
-
-    cout << endl;
-
-    it = que->begin();
-    int a = *it;
-    if(find(que->begin(), que->end(), a) != que->end()){
-        cout << a << endl;
-    }
+    delete pra;
 
     return 0;
 }
