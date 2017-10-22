@@ -70,7 +70,7 @@ void PRA::Run(){
 
             double value = ((rand() % 100) + 1) * PRA_Interface<Page>::dirtyRate;
 
-            if(value >= 0.1){
+            if(value >= 0.9){
                 page.setDirtyBit(true);
                 *it = page;
             }

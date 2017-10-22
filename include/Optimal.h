@@ -1,22 +1,17 @@
-#ifndef FIFO_H
-#define FIFO_H
+#ifndef OPTIMAL_H
+#define OPTIMAL_H
 
 #include "PRA_Interface.h"
-#include "TestRef_Interface.h"
 #include "Page.h"
-#include "RandomRef.h"
 
 #include <deque>
-#include <algorithm>
-#include <cstdlib>
-#include <iostream>
 
-class FIFO : public PRA_Interface<Page>
+class Optimal : public PRA_Interface<Page>
 {
     public:
-        FIFO(std::deque<Page>*, TestRef_Interface*);
-        FIFO(TestRef_Interface*);
-        virtual ~FIFO();
+        Optimal(std::deque<Page>*, TestRef_Interface*);
+        Optimal(TestRef_Interface*);
+        virtual ~Optimal();
 
         /*void setRefStringQue(std::deque<Page>*) override;
 
@@ -34,10 +29,13 @@ class FIFO : public PRA_Interface<Page>
 
         TestRef_Interface* getRefAlog() override;*/
 
+        // the event calling the OS happended. interrupt++
         void callOSEvent() override;
 
+        // the event causing page fault happended. pageFault++
         void pageFaultEvent(Page) override;
 
+        // the event writting the disk happended. writeDisk++
         void writeDiskEvent() ;
 
     protected:
@@ -45,4 +43,4 @@ class FIFO : public PRA_Interface<Page>
     private:
 };
 
-#endif // FIFO_H
+#endif // OPTIMAL_H

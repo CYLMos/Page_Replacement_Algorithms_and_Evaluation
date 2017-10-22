@@ -15,33 +15,33 @@ class PRA_Interface
         static double dirtyRate;
 
         // return interrupt times
-        virtual int getInterruptTimes() = 0;
+        int getInterruptTimes();
 
         // retunr page fault times
-        virtual int getPageFaultTimes() = 0;
+        int getPageFaultTimes();
 
         // return write disk times
-        virtual int getWriteDiskTimes() = 0;
+        int getWriteDiskTimes();
+
+        void setRefStringQue(std::deque<T>*);
+
+        std::deque<T>* getRefStringQue();
+
+        void setRefStringQue_History(std::deque<T>*);
+
+        std::deque<T>* getRefStringQue_History();
+
+        void setDram(std::deque<T>*);
+
+        std::deque<T>* getDram();
+
+        void setRefAlog(TestRef_Interface*);
+
+        TestRef_Interface* getRefAlog();
 
         /*
          the class inherenting this class must implement these function
          */
-
-        virtual void setRefStringQue(std::deque<T>*) = 0;
-
-        virtual std::deque<T>* getRefStringQue() = 0;
-
-        virtual void setRefStringQue_History(std::deque<T>*) = 0;
-
-        virtual std::deque<T>* getRefStringQue_History() = 0;
-
-        virtual void setDram(std::deque<T>*) = 0;
-
-        virtual std::deque<T>* getDram() = 0;
-
-        virtual void setRefAlog(TestRef_Interface*) = 0;
-
-        virtual TestRef_Interface* getRefAlog() = 0;
 
         // the event calling the OS happended. interrupt++
         virtual void callOSEvent() = 0;
@@ -52,10 +52,16 @@ class PRA_Interface
         // the event writting the disk happended. writeDisk++
         virtual void writeDiskEvent() = 0;
 
-        // start
-        //virtual void Run() = 0;
-
     protected:
+        int interrupt;
+        int pageFault;
+        int writeDisk;
+
+        std::deque<T>* refStringQue = nullptr;
+        std::deque<T>* refStringQue_History = nullptr;
+
+        std::deque<T>* dram = nullptr;
+        TestRef_Interface* refAlgo = nullptr;
 
 };
 
@@ -70,5 +76,75 @@ int PRA_Interface<T>::dramSize = 10;
 
 template<class T>
 double PRA_Interface<T>::dirtyRate = 0.01;
+
+template<class T>
+void PRA_Interface<T>::setRefStringQue(std::deque<T>*){
+    if(this->refStringQue != nullptr){
+        this->refStringQue->clear();
+        delete this->refStringQue;
+    }
+    this->refStringQue = refStringQue;
+}
+
+template<class T>
+std::deque<T>* PRA_Interface<T>::getRefStringQue(){
+    return this->refStringQue;
+}
+
+template<class T>
+void PRA_Interface<T>::setRefStringQue_History(std::deque<T>*){
+    if(this->refStringQue_History != nullptr){
+        this->refStringQue_History->clear();
+        delete this->refStringQue_History;
+    }
+    this->refStringQue_History = refStringQue_History;
+}
+
+template<class T>
+std::deque<T>* PRA_Interface<T>::getRefStringQue_History(){
+    return this->refStringQue_History;
+}
+
+template<class T>
+void PRA_Interface<T>::setDram(std::deque<T>*){
+    if(this->dram != nullptr){
+        this->dram->clear();
+        delete this->dram;
+    }
+    this->dram = dram;
+}
+
+template<class T>
+std::deque<T>* PRA_Interface<T>::getDram(){
+    return this->dram;
+}
+
+template<class T>
+void PRA_Interface<T>::setRefAlog(TestRef_Interface*){
+    if(this->refAlgo != nullptr){
+        delete this->refAlgo;
+    }
+    this->refAlgo = refAlgo;
+}
+
+template<class T>
+TestRef_Interface* PRA_Interface<T>::getRefAlog(){
+    return this->refAlgo;
+}
+
+template<class T>
+int PRA_Interface<T>::getInterruptTimes(){
+    return this->interrupt;
+}
+
+template<class T>
+int PRA_Interface<T>::getPageFaultTimes(){
+    return this->pageFault;
+}
+
+template<class T>
+int PRA_Interface<T>::getWriteDiskTimes(){
+    return this->writeDisk;
+}
 #endif // PRA_INTERFACE_H
 

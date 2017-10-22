@@ -31,57 +31,6 @@ FIFO::~FIFO(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
-void FIFO::setRefStringQue(std::deque<Page>* refStringQue){
-    if(this->refStringQue != nullptr){
-        this->refStringQue->clear();
-        delete this->refStringQue;
-    }
-    this->refStringQue = refStringQue;
-}
-
-std::deque<Page>* FIFO::getRefStringQue(){
-    return this->refStringQue;
-}
-
-void FIFO::setRefStringQue_History(std::deque<Page>* refStringQue_History){
-    this->refStringQue_History = refStringQue_History;
-}
-
-std::deque<Page>* FIFO::getRefStringQue_History(){
-    return this->refStringQue_History;
-}
-
-void FIFO::setDram(std::deque<Page>* dram){
-    this->dram = dram;
-}
-
-std::deque<Page>* FIFO::getDram(){
-    return this->dram;
-}
-
-void FIFO::setRefAlog(TestRef_Interface* refAlgo){
-    if(this->refAlgo != nullptr){
-        delete this->refStringQue;
-    }
-    this->refAlgo = refAlgo;
-}
-
-TestRef_Interface* FIFO::getRefAlog(){
-    return this->refAlgo;
-}
-
-int FIFO::getInterruptTimes(){
-    return this->interrupt;
-}
-
-int FIFO::getPageFaultTimes(){
-    return this->pageFault;
-}
-
-int FIFO::getWriteDiskTimes(){
-    return this->writeDisk;
-}
-
 void FIFO::callOSEvent(){
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){

@@ -13,9 +13,10 @@
 class PRA
 {
     public:
+
         PRA();
         PRA(PRA_Interface<Page>*, int);
-        //PRA(PRA_Interface<Page>*, TestRef_Interface*, int);
+
         virtual ~PRA();
 
         void setAlgorithm(PRA_Interface<Page>*);
@@ -36,7 +37,6 @@ class PRA
 
     private:
         PRA_Interface<Page>* algorithm = nullptr;
-        //TestRef_Interface* refAlgorithm = nullptr;
 
         int refTimes;
 };
