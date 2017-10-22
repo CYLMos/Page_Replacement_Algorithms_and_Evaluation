@@ -46,44 +46,13 @@ void FIFO::callOSEvent(){
 
 void FIFO::pageFaultEvent(Page refString){
     if(this->dram->size() >= (unsigned)PRA_Interface<Page>::dramSize){
-        std::deque<Page>* tempDeque = new std::deque<Page>();
-        tempDeque->assign(this->dram->begin(), this->dram->end());
-
-        bool stopFlag = false;
-        for(std::deque<Page>::reverse_iterator rit = this->refStringQue_History->rbegin(); rit != this->refStringQue_History->rend(); rit++){
-            Page page = *rit;
-
-            for(std::deque<Page>::iterator it = tempDeque->begin(); it!= tempDeque->end(); it++){
-                Page dramPage = *it;
-                if(page.getRefString() == dramPage.getRefString() && tempDeque->size() > 1){
-                    tempDeque->erase(it);
-
-                    break;
-                }
-                else if(tempDeque->size() == 1){
-                    stopFlag = true;
-
-                    break;
-                }
-            }
-
-            if(stopFlag){break;}
+        Page page = this->dram->front();
+        if(page.getDirtyBit()){
+            this->writeDiskEvent();
         }
 
-        Page victimPage = tempDeque->front();
-        for(std::deque<Page>::iterator it = this->dram->begin(); it!= this->dram->end(); it++){
-            Page dramPage = *it;
-
-            if(dramPage.getRefString() == victimPage.getRefString()){
-                dramPage.setRefString(refString.getRefString());
-                dramPage.setDirtyBit(refString.getDirtyBit());
-
-                *it = dramPage;
-            }
-        }
-
-        tempDeque->clear();
-        delete tempDeque;
+        this->dram->pop_front();
+        this->dram->push_back(refString);
     }
     else{
         this->dram->push_back(refString);

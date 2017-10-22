@@ -9,6 +9,12 @@ Page::Page(int refString, bool dirtyBit){
     this->dirtyBit = dirtyBit;
 }
 
+Page::Page(int refString, bool dirtyBit, bool refBit){
+    this->refString = refString;
+    this->dirtyBit = dirtyBit;
+    this->refBit = refBit;
+}
+
 Page::~Page(){
     //dtor
 }
@@ -27,4 +33,12 @@ int Page::getRefString(){
 
 bool Page::getDirtyBit(){
     return this->dirtyBit;
+}
+
+void Page::setRefBit(bool refBit){
+    this->refBit = refBit;
+}
+
+bool Page::getRefBit(){
+    return this->refBit;
 }

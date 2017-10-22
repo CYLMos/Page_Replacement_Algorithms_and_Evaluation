@@ -34,6 +34,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/EnhanceSC.h" />
 		<Unit filename="include/FIFO.h" />
 		<Unit filename="include/Optimal.h" />
 		<Unit filename="include/PRA.h" />
@@ -42,6 +43,7 @@
 		<Unit filename="include/RandomRef.h" />
 		<Unit filename="include/TestRef_Interface.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/EnhanceSC.cpp" />
 		<Unit filename="src/FIFO.cpp" />
 		<Unit filename="src/Optimal.cpp" />
 		<Unit filename="src/PRA.cpp" />

@@ -75,7 +75,7 @@ template<class T>
 int PRA_Interface<T>::dramSize = 15;
 
 template<class T>
-double PRA_Interface<T>::dirtyRate = 0.01;
+double PRA_Interface<T>::dirtyRate = 0.5;
 
 template<class T>
 void PRA_Interface<T>::setRefStringQue(std::deque<T>*){

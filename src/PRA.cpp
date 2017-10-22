@@ -45,6 +45,9 @@ void PRA::Run(){
             for(std::deque<Page>::iterator subIt = this->algorithm->getDram()->begin(); subIt != this->algorithm->getDram()->end(); subIt++){
                 Page dramPage = *subIt;
                 if(page.getRefString() == dramPage.getRefString()){
+                    dramPage.setRefBit(true);
+                    *subIt = dramPage;
+
                     existFlag = true;
 
                     break;
@@ -72,9 +75,9 @@ void PRA::Run(){
                 page.setDirtyBit(false);
             }
 
-            double value = ((rand() % 100) + 1) * PRA_Interface<Page>::dirtyRate;
+            double value = ((rand() % 100) + 1) * 0.01;
 
-            if(value >= 0.9){
+            if(value >= PRA_Interface<Page>::dirtyRate){
                 page.setDirtyBit(true);
                 *it = page;
             }

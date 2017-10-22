@@ -6,22 +6,28 @@ class Page
 {
     public:
         Page();
-        Page(int refString, bool dirtyBit);
+        Page(int, bool);
+        Page(int, bool, bool);
         virtual ~Page();
 
-        void setRefString(int refString);
-
-        void setDirtyBit(bool dirtyBit);
+        void setRefString(int);
 
         int getRefString();
 
+        void setDirtyBit(bool);
+
         bool getDirtyBit();
+
+        void setRefBit(bool);
+
+        bool getRefBit();
 
     protected:
 
     private:
         int refString;
         bool dirtyBit;
+        bool refBit;
 };
 
 #endif // PAGE_H

@@ -7,7 +7,6 @@
 #include <deque>
 #include <cstdlib>
 
-
 class RandomRef : public TestRef_Interface
 {
     public:
