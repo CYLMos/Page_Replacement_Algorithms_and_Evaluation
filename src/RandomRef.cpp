@@ -1,4 +1,5 @@
 #include "RandomRef.h"
+#include "time.h"
 
 RandomRef::RandomRef(int randSeed)
 {
@@ -20,7 +21,7 @@ std::deque<Page>* RandomRef::chooseReferenceAlgo(int rang, int length){
         refStringQue->push_back(page);
     }
 
-    this->randSeed = rand() % 10000;
+    this->randSeed = rand() % time(nullptr);
 
     return refStringQue;
 }

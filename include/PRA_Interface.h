@@ -66,13 +66,13 @@ class PRA_Interface
 };
 
 template<class T>
-int PRA_Interface<T>::refStringQueSize = 10;
+int PRA_Interface<T>::refStringQueSize = 60;
 
 template<class T>
-int PRA_Interface<T>::historyRefStringQueSize = refStringQueSize * 3;
+int PRA_Interface<T>::historyRefStringQueSize = refStringQueSize;
 
 template<class T>
-int PRA_Interface<T>::dramSize = 10;
+int PRA_Interface<T>::dramSize = 15;
 
 template<class T>
 double PRA_Interface<T>::dirtyRate = 0.01;

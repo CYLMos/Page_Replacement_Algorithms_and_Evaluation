@@ -36,7 +36,9 @@ void PRA::Run(){
 
         this->algorithm->callOSEvent();
 
-        for(std::deque<Page>::iterator it = this->algorithm->getRefStringQue()->begin(); it!= this->algorithm->getRefStringQue()->end(); it++){
+        while(this->algorithm->getRefStringQue()->size() > 0){
+            std::deque<Page>::iterator it = this->algorithm->getRefStringQue()->begin();
+
             Page page = *it;
 
             bool existFlag = false;
@@ -57,6 +59,8 @@ void PRA::Run(){
                 this->algorithm->getRefStringQue_History()->pop_front();
             }
             this->algorithm->getRefStringQue_History()->push_back(page);
+
+            this->algorithm->getRefStringQue()->pop_front();
         }
 
         srand(time(nullptr));

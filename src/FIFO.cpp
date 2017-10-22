@@ -39,7 +39,7 @@ void FIFO::callOSEvent(){
         delete this->refStringQue;
     }
 
-    this->refStringQue = this->refAlgo->chooseReferenceAlgo(350, PRA_Interface<Page>::refStringQueSize);
+    this->refStringQue = this->refAlgo->chooseReferenceAlgo(30, PRA_Interface<Page>::refStringQueSize);
 
     this->interrupt++;
 }
@@ -77,6 +77,8 @@ void FIFO::pageFaultEvent(Page refString){
             if(dramPage.getRefString() == victimPage.getRefString()){
                 dramPage.setRefString(refString.getRefString());
                 dramPage.setDirtyBit(refString.getDirtyBit());
+
+                *it = dramPage;
             }
         }
 
