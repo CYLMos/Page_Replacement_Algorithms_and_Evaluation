@@ -1,5 +1,6 @@
 #include "FIFO.h"
 
+// Init
 FIFO::FIFO(std::deque<Page>* refStringQue, TestRef_Interface* refAlgo){
     this->interrupt = 0;
     this->pageFault = 0;
@@ -13,6 +14,7 @@ FIFO::FIFO(std::deque<Page>* refStringQue, TestRef_Interface* refAlgo){
     this->dram = new std::deque<Page>();
 }
 
+// Init
 FIFO::FIFO(TestRef_Interface* refAlgo){
     this->interrupt = 0;
     this->pageFault = 0;
@@ -24,6 +26,7 @@ FIFO::FIFO(TestRef_Interface* refAlgo){
     this->dram = new std::deque<Page>();
 }
 
+// Release memory
 FIFO::~FIFO(){
     if(this->refStringQue != nullptr){delete this->refStringQue;}
     if(this->refStringQue_History != nullptr){delete this->refStringQue_History;}
@@ -31,7 +34,9 @@ FIFO::~FIFO(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
+// Implement callOSEvent
 void FIFO::callOSEvent(){
+    // If refStringQue not null, clear it.
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){
             this->refStringQue->clear();
@@ -39,18 +44,23 @@ void FIFO::callOSEvent(){
         delete this->refStringQue;
     }
 
+    // Get new reference string.
     this->refStringQue = this->refAlgo->chooseReferenceAlgo(30, PRA_Interface<Page>::refStringQueSize);
 
     this->interrupt++;
 }
 
+// Implement pageFaultEvent
 void FIFO::pageFaultEvent(Page refString){
     if(this->dram->size() >= (unsigned)PRA_Interface<Page>::dramSize){
         Page page = this->dram->front();
+
+        // If the dirty bit is true, call writeDiskEvent.
         if(page.getDirtyBit()){
             this->writeDiskEvent();
         }
 
+        // First to last.
         this->dram->pop_front();
         this->dram->push_back(refString);
     }
@@ -61,6 +71,7 @@ void FIFO::pageFaultEvent(Page refString){
     this->pageFault++;
 }
 
+// Implement writeDskEvent
 void FIFO::writeDiskEvent(){
     this->writeDisk++;
 }

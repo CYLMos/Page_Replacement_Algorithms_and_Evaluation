@@ -11,6 +11,14 @@
 #include <cstdlib>
 #include <iostream>
 
+/**
+
+This class inhernets from PRA_Interface.
+
+FIFO is used to do the operation about FIFO algorithm of ths OS.
+
+**/
+
 class FIFO : public PRA_Interface<Page>
 {
     public:
@@ -18,10 +26,13 @@ class FIFO : public PRA_Interface<Page>
         FIFO(TestRef_Interface*);
         virtual ~FIFO();
 
+        // Implement callOSEvent
         void callOSEvent() override;
 
+        // Implement pageFaultEvent
         void pageFaultEvent(Page) override;
 
+        //Implement writeDiskEvent
         void writeDiskEvent() override;
 
     protected:

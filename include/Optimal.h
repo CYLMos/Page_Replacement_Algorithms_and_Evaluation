@@ -6,6 +6,14 @@
 
 #include <deque>
 
+/**
+
+This class inhernets from PRA_Interface.
+
+Optimal is used to do the operation about the optimal algorithm of ths OS.
+
+**/
+
 class Optimal : public PRA_Interface<Page>
 {
     public:
@@ -13,13 +21,13 @@ class Optimal : public PRA_Interface<Page>
         Optimal(TestRef_Interface*);
         virtual ~Optimal();
 
-        // the event calling the OS happended. interrupt++
+        // Implement callOSEvent
         void callOSEvent() override;
 
-        // the event causing page fault happended. pageFault++
+        // Implement pageFaultEvent
         void pageFaultEvent(Page) override;
 
-        // the event writting the disk happended. writeDisk++
+        //Implement writeDiskEvent
         void writeDiskEvent() override;
 
     protected:

@@ -6,6 +6,14 @@
 
 #include <deque>
 
+/**
+
+This class inhernets from PRA_Interface.
+
+EnhanceSC is used to do the operation the about enhance second chance algorithm of ths OS.
+
+**/
+
 class EnhanceSC : public PRA_Interface<Page>
 {
     public:
@@ -13,13 +21,13 @@ class EnhanceSC : public PRA_Interface<Page>
         EnhanceSC(TestRef_Interface*);
         virtual ~EnhanceSC();
 
-        // the event calling the OS happended. interrupt++
+        // Implement callOSEvent
         void callOSEvent() override;
 
-        // the event causing page fault happended. pageFault++
+        // Implement pageFaultEvent
         void pageFaultEvent(Page) override;
 
-        // the event writting the disk happended. writeDisk++
+        //Implement writeDiskEvent
         void writeDiskEvent() override;
 
     protected:

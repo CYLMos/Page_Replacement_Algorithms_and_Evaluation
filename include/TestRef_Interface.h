@@ -9,6 +9,11 @@
 class TestRef_Interface
 {
     public:
+        /*
+         the class inherenting this class must implement this function
+         */
+
+        // Implement the choose reserence string algo.
         virtual std::deque<Page>* chooseReferenceAlgo(int rang, int length) = 0;
 
     protected:

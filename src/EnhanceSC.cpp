@@ -1,6 +1,7 @@
 #include "EnhanceSC.h"
 #include <iostream>
 
+// Init
 EnhanceSC::EnhanceSC(std::deque<Page>* refStringQue, TestRef_Interface* refAlgo){
     this->interrupt = 0;
     this->pageFault = 0;
@@ -14,6 +15,7 @@ EnhanceSC::EnhanceSC(std::deque<Page>* refStringQue, TestRef_Interface* refAlgo)
     this->dram = new std::deque<Page>();
 }
 
+// Init
 EnhanceSC::EnhanceSC(TestRef_Interface* refAlgo){
     this->interrupt = 0;
     this->pageFault = 0;
@@ -25,6 +27,7 @@ EnhanceSC::EnhanceSC(TestRef_Interface* refAlgo){
     this->dram = new std::deque<Page>();
 }
 
+// Release memory
 EnhanceSC::~EnhanceSC(){
     if(this->refStringQue != nullptr){delete this->refStringQue;}
     if(this->refStringQue_History != nullptr){delete this->refStringQue_History;}
@@ -32,6 +35,7 @@ EnhanceSC::~EnhanceSC(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
+// Implement callOSEvent
 void EnhanceSC::callOSEvent(){
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){
@@ -45,13 +49,16 @@ void EnhanceSC::callOSEvent(){
     this->interrupt++;
 }
 
+// Implement pageFaultEvent
 void EnhanceSC::pageFaultEvent(Page refString){
     if(this->dram->size() >= (unsigned)PRA_Interface<Page>::dramSize){
         bool doubleZeroFlag = false;
         Page lastPage = this->dram->front();
         Page nowPage;
 
-        // Find (0, 0) first.
+        /**
+        Find (0, 0) first.
+        */
         while(nowPage.getRefString() != lastPage.getRefString()){
             Page beginPage = this->dram->front();
             this->dram->pop_front();
@@ -60,6 +67,7 @@ void EnhanceSC::pageFaultEvent(Page refString){
             std::deque<Page>::iterator it = this->dram->begin();
             nowPage = *it;
             if( nowPage.getRefBit() == false && nowPage.getDirtyBit() == false ){
+                /* If get (0, 0), break. */
                 doubleZeroFlag = true;
 
                 break;
@@ -70,8 +78,12 @@ void EnhanceSC::pageFaultEvent(Page refString){
             }
         }
 
+        /**
+        If not find (0, 0), find (0, 0) again.
+        If still not find, find (0, 1).
+        */
         if(!doubleZeroFlag){
-            /* Find (0, 1) or (0, 0) next.
+            /** Find (0, 1) or (0, 0) next.
                (0, 0) first
             */
             while(nowPage.getRefString() != lastPage.getRefString()){
@@ -87,7 +99,9 @@ void EnhanceSC::pageFaultEvent(Page refString){
                 }
             }
 
-            // (0, 1) next
+            /**
+            (0, 1) next
+            */
             if(!doubleZeroFlag){
                 bool otherFlag = true;
                 while(nowPage.getRefString() != lastPage.getRefString()){
@@ -105,6 +119,9 @@ void EnhanceSC::pageFaultEvent(Page refString){
         }
 
 
+        /**
+        Replace reference string
+        */
         std::deque<Page>::iterator it = this->dram->begin();
         Page victimPage = *it;
 
@@ -121,6 +138,7 @@ void EnhanceSC::pageFaultEvent(Page refString){
     this->pageFault++;
 }
 
+// Implement writeDskEvent
 void EnhanceSC::writeDiskEvent(){
     this->writeDisk++;
 }

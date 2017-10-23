@@ -1,6 +1,7 @@
 #include "Optimal.h"
 #include <iostream>
 
+// Init
 Optimal::Optimal(std::deque<Page>* refStringQue, TestRef_Interface* refAlgo){
     this->interrupt = 0;
     this->pageFault = 0;
@@ -14,6 +15,7 @@ Optimal::Optimal(std::deque<Page>* refStringQue, TestRef_Interface* refAlgo){
     this->dram = new std::deque<Page>();
 }
 
+// Init
 Optimal::Optimal(TestRef_Interface* refAlgo){
     this->interrupt = 0;
     this->pageFault = 0;
@@ -25,6 +27,7 @@ Optimal::Optimal(TestRef_Interface* refAlgo){
     this->dram = new std::deque<Page>();
 }
 
+// Release memory
 Optimal::~Optimal(){
     if(this->refStringQue != nullptr){delete this->refStringQue;}
     if(this->refStringQue_History != nullptr){delete this->refStringQue_History;}
@@ -32,7 +35,9 @@ Optimal::~Optimal(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
+// Implement callOSEvent
 void Optimal::callOSEvent(){
+    // If refStringQue not null, clear it.
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){
             this->refStringQue->clear();
@@ -40,15 +45,32 @@ void Optimal::callOSEvent(){
         delete this->refStringQue;
     }
 
+    // Get new reference string.
     this->refStringQue = this->refAlgo->chooseReferenceAlgo(30, PRA_Interface<Page>::refStringQueSize);
 
     this->interrupt++;
 }
 
+// Implement pageFaultEvent
 void Optimal::pageFaultEvent(Page refString){
     if(this->dram->size() >= (unsigned)PRA_Interface<Page>::dramSize){
+
+        /**
+        Copy dram to tempDeque.
+        Only change tempDeque in the after operation.
+        */
         std::deque<Page>* tempDeque = new std::deque<Page>();
         tempDeque->assign(this->dram->begin(), this->dram->end());
+
+        /**
+        Find the same reference string in refStringQue.
+
+        And then erase it in tempDeque.
+
+        If the size of tempDeque is 1, then the only one is victim.
+        If the size bigger than 1, the first in tempDeque is victim.
+
+        */
 
         bool stopFlag = false;
         for(std::deque<Page>::iterator it = this->refStringQue->begin(); it != this->refStringQue->end(); it++){
@@ -68,8 +90,13 @@ void Optimal::pageFaultEvent(Page refString){
                 }
             }
 
+            // If stopFlag is true, out Loop.
             if(stopFlag){break;}
         }
+
+        /**
+        Replace reference string
+        */
 
         Page victimPage = tempDeque->front();
         for(std::deque<Page>::iterator it = this->dram->begin(); it!= this->dram->end(); it++){
@@ -93,6 +120,7 @@ void Optimal::pageFaultEvent(Page refString){
     this->pageFault++;
 }
 
+// Implement writeDskEvent
 void Optimal::writeDiskEvent(){
     this->writeDisk++;
 }

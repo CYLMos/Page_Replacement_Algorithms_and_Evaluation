@@ -4,6 +4,12 @@
 #include <deque>
 #include "TestRef_Interface.h"
 
+/**
+The interface aobut the page replacement algorithm.
+
+To implement algorithm about page replacement algorithm must inherent this class.
+*/
+
 template<class T>
 class PRA_Interface
 {
@@ -23,23 +29,31 @@ class PRA_Interface
         // return write disk times
         int getWriteDiskTimes();
 
+        // set reference string queue
         void setRefStringQue(std::deque<T>*);
 
+        // get reference string queue
         std::deque<T>* getRefStringQue();
 
+        // set reference string history queue
         void setRefStringQue_History(std::deque<T>*);
 
+        // get reference string history queue
         std::deque<T>* getRefStringQue_History();
 
+        // set dram
         void setDram(std::deque<T>*);
 
+        // get dram
         std::deque<T>* getDram();
 
+        // set the algorithm that get reference string
         void setRefAlog(TestRef_Interface*);
 
+        // get the algorithm that get reference string
         TestRef_Interface* getRefAlog();
 
-        /*
+        /**
          the class inherenting this class must implement these function
          */
 

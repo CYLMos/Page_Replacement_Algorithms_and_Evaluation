@@ -1,14 +1,17 @@
 #include "Page.h"
 
+// Init
 Page::Page(){
     //ctor
 }
 
+// Init
 Page::Page(int refString, bool dirtyBit){
     this->refString = refString;
     this->dirtyBit = dirtyBit;
 }
 
+// Init
 Page::Page(int refString, bool dirtyBit, bool refBit){
     this->refString = refString;
     this->dirtyBit = dirtyBit;
