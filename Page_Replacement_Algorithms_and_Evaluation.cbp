@@ -36,6 +36,8 @@
 		</Compiler>
 		<Unit filename="include/EnhanceSC.h" />
 		<Unit filename="include/FIFO.h" />
+		<Unit filename="include/Locality.h" />
+		<Unit filename="include/MyOwnPRA.h" />
 		<Unit filename="include/Optimal.h" />
 		<Unit filename="include/PRA.h" />
 		<Unit filename="include/PRA_Interface.h" />
@@ -45,6 +47,8 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="src/EnhanceSC.cpp" />
 		<Unit filename="src/FIFO.cpp" />
+		<Unit filename="src/Locality.cpp" />
+		<Unit filename="src/MyOwnPRA.cpp" />
 		<Unit filename="src/Optimal.cpp" />
 		<Unit filename="src/PRA.cpp" />
 		<Unit filename="src/PRA_Interface.cpp" />

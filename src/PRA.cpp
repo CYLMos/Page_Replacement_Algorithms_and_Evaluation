@@ -1,4 +1,5 @@
 #include "PRA.h"
+#include <iostream>
 
 PRA::PRA(){
     this->refTimes = 0;

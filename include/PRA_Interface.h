@@ -80,7 +80,7 @@ class PRA_Interface
 };
 
 template<class T>
-int PRA_Interface<T>::refStringQueSize = 60;
+int PRA_Interface<T>::refStringQueSize = 15;
 
 template<class T>
 int PRA_Interface<T>::historyRefStringQueSize = refStringQueSize;
