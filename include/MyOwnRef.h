@@ -1,5 +1,5 @@
-#ifndef RANDOMREF_H
-#define RANDOMREF_H
+#ifndef MYOWNREF_H
+#define MYOWNREF_H
 
 #include "TestRef_Interface.h"
 #include "Page.h"
@@ -7,11 +7,11 @@
 #include <deque>
 #include <cstdlib>
 
-class RandomRef : public TestRef_Interface
+class MyOwnRef : public TestRef_Interface
 {
     public:
-        RandomRef(int);
-        virtual ~RandomRef();
+        MyOwnRef(int);
+        virtual ~MyOwnRef();
 
         std::deque<Page>* chooseReferenceAlgo(int, int) override;
 
@@ -19,6 +19,7 @@ class RandomRef : public TestRef_Interface
 
     private:
         int randSeed;
+        std::deque<Page>* lastChooseDeque = nullptr;
 };
 
-#endif // RANDOMREF_H
+#endif // MYOWNREF_H

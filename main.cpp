@@ -8,6 +8,7 @@
 #include "MyOwnPRA.h"
 #include "RandomRef.h"
 #include "Locality.h"
+#include "MyOwnRef.h"
 #include "PRA.h"
 
 #include <deque>
@@ -16,8 +17,8 @@ using namespace std;
 
 int main()
 {
-    TestRef_Interface* refAlgorithm = new Locality(time(NULL));
-    PRA_Interface<Page>* algorithm = new FIFO(refAlgorithm);
+    TestRef_Interface* refAlgorithm = new Locality(1000);
+    PRA_Interface<Page>* algorithm = new MyOwnPRA(refAlgorithm);
 
     PRA* pra = new PRA(algorithm, 70000);
 

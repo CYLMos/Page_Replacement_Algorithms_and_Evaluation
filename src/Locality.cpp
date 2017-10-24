@@ -54,7 +54,7 @@ std::deque<Page>* Locality::chooseReferenceAlgo(int rang, int length){
         this->lastChooseDeque->assign(refStringQue->begin(), refStringQue->end());
     }
 
-    this->randSeed = rand() % time(nullptr);
+    this->randSeed = rand() % time(NULL);
 
     /*for(std::deque<Page>::iterator it = this->lastChooseDeque->begin(); it != this->lastChooseDeque->end(); it++){
         Page page = *it;
