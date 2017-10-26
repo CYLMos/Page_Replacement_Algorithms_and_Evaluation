@@ -45,7 +45,7 @@ void FIFO::callOSEvent(){
     }
 
     // Get new reference string.
-    this->refStringQue = this->refAlgo->chooseReferenceAlgo(40, PRA_Interface<Page>::refStringQueSize);
+    this->refStringQue = this->refAlgo->chooseReferenceAlgo(PRA_Interface<Page>::range, PRA_Interface<Page>::refStringQueSize);
 
     this->interrupt++;
 }

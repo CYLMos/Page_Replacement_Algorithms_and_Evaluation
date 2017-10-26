@@ -44,7 +44,7 @@ void EnhanceSC::callOSEvent(){
         delete this->refStringQue;
     }
 
-    this->refStringQue = this->refAlgo->chooseReferenceAlgo(40, PRA_Interface<Page>::refStringQueSize);
+    this->refStringQue = this->refAlgo->chooseReferenceAlgo(PRA_Interface<Page>::range, PRA_Interface<Page>::refStringQueSize);
 
     this->interrupt++;
 }
@@ -120,7 +120,32 @@ bool EnhanceSC::findZeroZero(){
 bool EnhanceSC::findZeroOne(){
     bool findFlag = false;
 
-    int counter = 1;
+    Page lastPage = this->dram->front();
+    Page nowPage;
+
+        /**
+        Find (0, 1) first.
+        */
+    while(nowPage.getRefString() != lastPage.getRefString()){
+        Page beginPage = this->dram->front();
+        this->dram->pop_front();
+        this->dram->push_back(beginPage);
+
+        std::deque<Page>::iterator it = this->dram->begin();
+        nowPage = *it;
+        if( nowPage.getRefBit() == false && nowPage.getDirtyBit() == true ){
+            findFlag = true;
+
+            break;;
+        }
+        else{
+            it->setRefBit(false);
+        }
+    }
+
+    for(std::deque<Page>::iterator it = this->dram->begin();it != this->dram->end();it++){
+    }
+    /*int counter = 1;
     for(std::deque<Page>::iterator it = ++this->dram->begin(); it != this->dram->end(); it++){
         Page nowPage = *it;
         if(nowPage.getRefBit() == false && nowPage.getDirtyBit() == true){
@@ -148,7 +173,7 @@ bool EnhanceSC::findZeroOne(){
 
             counter--;
         }
-    }
+    }*/
 
     return findFlag;
 }

@@ -28,7 +28,8 @@ std::deque<Page>* Locality::chooseReferenceAlgo(int rang, int length){
 
             if( counter != 0){
                 int index = randNum % length;
-                refStringQue->push_back( this->lastChooseDeque->at(index) );
+                Page page = this->lastChooseDeque->at(index);
+                refStringQue->push_back( page );
 
                 counter--;
             }

@@ -19,6 +19,7 @@ class PRA_Interface
         static int historyRefStringQueSize;
         static int dramSize;
         static double dirtyRate;
+        static int range;
 
         // return interrupt times
         int getInterruptTimes();
@@ -83,13 +84,16 @@ template<class T>
 int PRA_Interface<T>::refStringQueSize = 15;
 
 template<class T>
-int PRA_Interface<T>::historyRefStringQueSize = refStringQueSize;
+int PRA_Interface<T>::historyRefStringQueSize = refStringQueSize * 2;
 
 template<class T>
 int PRA_Interface<T>::dramSize = 15;
 
 template<class T>
 double PRA_Interface<T>::dirtyRate = 0.5;
+
+template<class T>
+int PRA_Interface<T>::range = 40;
 
 template<class T>
 void PRA_Interface<T>::setRefStringQue(std::deque<T>*){

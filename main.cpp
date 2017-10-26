@@ -18,9 +18,20 @@ using namespace std;
 int main()
 {
     TestRef_Interface* refAlgorithm = new Locality(1000);
-    PRA_Interface<Page>* algorithm = new MyOwnPRA(refAlgorithm);
+    PRA_Interface<Page>* algorithm = new EnhanceSC(refAlgorithm);
 
-    PRA* pra = new PRA(algorithm, 70000);
+    int refStringNum;
+
+    cout << "Input the number of the frams: ";
+    cin >> PRA_Interface<Page>::dramSize;
+
+    cout << "Input the number of the refence string: ";
+    cin >> refStringNum;
+
+    cout << "Input the range: ";
+    cin >> PRA_Interface<Page>::range;
+
+    PRA* pra = new PRA(algorithm, refStringNum);
 
     pra->Run();
 
