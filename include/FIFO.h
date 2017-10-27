@@ -26,6 +26,9 @@ class FIFO : public PRA_Interface<Page>
         FIFO(TestRef_Interface*);
         virtual ~FIFO();
 
+        // Implement getNewRefString
+        void getNewRefStrings() override;
+
         // Implement callOSEvent
         void callOSEvent() override;
 

@@ -21,6 +21,9 @@ class Optimal : public PRA_Interface<Page>
         Optimal(TestRef_Interface*);
         virtual ~Optimal();
 
+        // Implement getNewRefString
+        void getNewRefStrings() override;
+
         // Implement callOSEvent
         void callOSEvent() override;
 

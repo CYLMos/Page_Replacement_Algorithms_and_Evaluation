@@ -1,6 +1,8 @@
 #include "EnhanceSC.h"
 #include <iostream>
 
+//#define TEST;
+
 // Init
 EnhanceSC::EnhanceSC(std::deque<Page>* refStringQue, TestRef_Interface* refAlgo){
     this->interrupt = 0;
@@ -35,8 +37,9 @@ EnhanceSC::~EnhanceSC(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
-// Implement callOSEvent
-void EnhanceSC::callOSEvent(){
+// Implement getNewRefString
+void EnhanceSC::getNewRefStrings(){
+    // If refStringQue not null, clear it.
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){
             this->refStringQue->clear();
@@ -44,14 +47,37 @@ void EnhanceSC::callOSEvent(){
         delete this->refStringQue;
     }
 
+    // Get new reference string.
     this->refStringQue = this->refAlgo->chooseReferenceAlgo(PRA_Interface<Page>::range, PRA_Interface<Page>::refStringQueSize);
+}
 
+// Implement callOSEvent
+void EnhanceSC::callOSEvent(){
     this->interrupt++;
 }
 
 // Implement pageFaultEvent
 void EnhanceSC::pageFaultEvent(Page refString){
     if(this->dram->size() >= (unsigned)PRA_Interface<Page>::dramSize){
+
+        #ifdef TEST
+            std::cout << "new Page: " << refString.getRefString() << std::endl;
+            for(std::deque<Page>::iterator it = this->dram->begin(); it != this->dram->end(); it++){
+                Page page = *it;
+                std::cout << " " << page.getRefString();
+            }
+            std::cout << std::endl;
+            for(std::deque<Page>::iterator it = this->dram->begin(); it != this->dram->end(); it++){
+                Page page = *it;
+                std::cout << " " << page.getRefBit();
+            }
+            std::cout << std::endl;
+            for(std::deque<Page>::iterator it = this->dram->begin(); it != this->dram->end(); it++){
+                Page page = *it;
+                std::cout << " " << page.getDirtyBit();
+            }
+            std::cout << std::endl;
+        #endif // TEST
 
         if(!this->findZeroZero()){
             if(!this->findZeroOne()){
@@ -74,6 +100,23 @@ void EnhanceSC::pageFaultEvent(Page refString){
             this->replaceVictim(refString);
         }
 
+        #ifdef TEST
+            for(std::deque<Page>::iterator it = this->dram->begin(); it != this->dram->end(); it++){
+                Page page = *it;
+                std::cout << " " << page.getRefString();
+            }
+            std::cout << std::endl;
+            for(std::deque<Page>::iterator it = this->dram->begin(); it != this->dram->end(); it++){
+                Page page = *it;
+                std::cout << " " << page.getRefBit();
+            }
+            std::cout << std::endl;
+            for(std::deque<Page>::iterator it = this->dram->begin(); it != this->dram->end(); it++){
+                Page page = *it;
+                std::cout << " " << page.getDirtyBit();
+            }
+            std::cout << std::endl;
+        #endif // TEST
 
 
         /**
@@ -124,7 +167,7 @@ bool EnhanceSC::findZeroOne(){
     Page nowPage;
 
         /**
-        Find (0, 1) first.
+        Find (0, 1)
         */
     while(nowPage.getRefString() != lastPage.getRefString()){
         Page beginPage = this->dram->front();
@@ -136,44 +179,19 @@ bool EnhanceSC::findZeroOne(){
         if( nowPage.getRefBit() == false && nowPage.getDirtyBit() == true ){
             findFlag = true;
 
-            break;;
-        }
-        else{
-            it->setRefBit(false);
-        }
-    }
-
-    for(std::deque<Page>::iterator it = this->dram->begin();it != this->dram->end();it++){
-    }
-    /*int counter = 1;
-    for(std::deque<Page>::iterator it = ++this->dram->begin(); it != this->dram->end(); it++){
-        Page nowPage = *it;
-        if(nowPage.getRefBit() == false && nowPage.getDirtyBit() == true){
-            this->writeDiskEvent();
-
-            findFlag = true;
             break;
         }
         else{
-            it->setRefBit(false);
-
-            counter++;
+            if(it->getRefBit()){
+                this->callOSEvent();
+                it->setRefBit(false);
+            }
         }
     }
 
-    if(!findFlag){
-        std::deque<Page>::iterator it = this->dram->begin();
-        it->setRefBit(false);
+    //make sure update
+    for(std::deque<Page>::iterator it = this->dram->begin();it != this->dram->end();it++){
     }
-    else{
-        while(counter != 0){
-            Page page = this->dram->front();
-            this->dram->pop_front();
-            this->dram->push_back(page);
-
-            counter--;
-        }
-    }*/
 
     return findFlag;
 }
@@ -183,6 +201,10 @@ void EnhanceSC::replaceVictim(Page page){
     std::deque<Page>::iterator it = this->dram->begin();
     victimPage = *it;
 
+    if(victimPage.getDirtyBit()){
+        this->writeDiskEvent();
+    }
+    //this->callOSEvent();
     victimPage.setRefString(page.getRefString());
     victimPage.setDirtyBit(page.getDirtyBit());
     victimPage.setRefBit(page.getRefBit());

@@ -34,8 +34,8 @@ FIFO::~FIFO(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
-// Implement callOSEvent
-void FIFO::callOSEvent(){
+// Implement getNewRefString
+void FIFO::getNewRefStrings(){
     // If refStringQue not null, clear it.
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){
@@ -46,7 +46,10 @@ void FIFO::callOSEvent(){
 
     // Get new reference string.
     this->refStringQue = this->refAlgo->chooseReferenceAlgo(PRA_Interface<Page>::range, PRA_Interface<Page>::refStringQueSize);
+}
 
+// Implement callOSEvent
+void FIFO::callOSEvent(){
     this->interrupt++;
 }
 
@@ -60,7 +63,11 @@ void FIFO::pageFaultEvent(Page refString){
             this->writeDiskEvent();
         }
 
-        // First to last.
+        /**
+        FIFO don't clear reference bits because FIFO always pop out its first element in the queue.
+        */
+
+        // First out and newest add in last.
         this->dram->pop_front();
         this->dram->push_back(refString);
     }

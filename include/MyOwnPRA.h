@@ -13,6 +13,9 @@ class MyOwnPRA : public PRA_Interface<Page>
         MyOwnPRA(TestRef_Interface*);
         virtual ~MyOwnPRA();
 
+        // Implement getNewRefString
+        void getNewRefStrings() override;
+
         // Implement callOSEvent
         void callOSEvent() override;
 

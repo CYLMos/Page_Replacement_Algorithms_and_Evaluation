@@ -58,6 +58,9 @@ class PRA_Interface
          the class inherenting this class must implement these function
          */
 
+        // the event get new reference strings.
+        virtual void getNewRefStrings() = 0;
+
         // the event calling the OS happended. interrupt++
         virtual void callOSEvent() = 0;
 
@@ -81,7 +84,7 @@ class PRA_Interface
 };
 
 template<class T>
-int PRA_Interface<T>::refStringQueSize = 15;
+int PRA_Interface<T>::refStringQueSize = 100;
 
 template<class T>
 int PRA_Interface<T>::historyRefStringQueSize = refStringQueSize * 2;
@@ -90,7 +93,7 @@ template<class T>
 int PRA_Interface<T>::dramSize = 15;
 
 template<class T>
-double PRA_Interface<T>::dirtyRate = 0.5;
+double PRA_Interface<T>::dirtyRate = 0.1;
 
 template<class T>
 int PRA_Interface<T>::range = 40;

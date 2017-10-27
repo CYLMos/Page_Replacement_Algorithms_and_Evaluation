@@ -35,8 +35,8 @@ Optimal::~Optimal(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
-// Implement callOSEvent
-void Optimal::callOSEvent(){
+// Implement getNewRefString
+void Optimal::getNewRefStrings(){
     // If refStringQue not null, clear it.
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){
@@ -46,8 +46,11 @@ void Optimal::callOSEvent(){
     }
 
     // Get new reference string.
-    this->refStringQue = this->refAlgo->chooseReferenceAlgo(30, PRA_Interface<Page>::refStringQueSize);
+    this->refStringQue = this->refAlgo->chooseReferenceAlgo(PRA_Interface<Page>::range, PRA_Interface<Page>::refStringQueSize);
+}
 
+// Implement callOSEvent
+void Optimal::callOSEvent(){
     this->interrupt++;
 }
 
@@ -99,10 +102,14 @@ void Optimal::pageFaultEvent(Page refString){
         */
 
         Page victimPage = tempDeque->front();
-        for(std::deque<Page>::iterator it = this->dram->begin(); it!= this->dram->end(); it++){
+        for(std::deque<Page>::iterator it = this->dram->begin(); it != this->dram->end(); it++){
             Page dramPage = *it;
 
             if(dramPage.getRefString() == victimPage.getRefString()){
+                if(dramPage.getDirtyBit()){
+                    this->writeDiskEvent();
+                }
+
                 dramPage.setRefString(refString.getRefString());
                 dramPage.setDirtyBit(refString.getDirtyBit());
 

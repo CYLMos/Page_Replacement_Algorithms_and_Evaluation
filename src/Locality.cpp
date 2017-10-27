@@ -39,6 +39,22 @@ std::deque<Page>* Locality::chooseReferenceAlgo(int rang, int length){
             }
         }
 
+        // Shuffle
+        for(std::deque<Page>::iterator it = refStringQue->begin(); it != refStringQue->end(); it++){
+            int index = rand() % length;
+            std::deque<Page>::iterator it2 = refStringQue->begin() + index;
+
+            Page pageIt = *it;
+            Page pageIt2 = *it2;
+            Page temp = pageIt;
+
+            pageIt.setRefString(pageIt2.getRefString());
+            pageIt2.setRefString(temp.getRefString());
+
+            *it = pageIt;
+            *it2 = pageIt2;
+        }
+
         this->lastChooseDeque->clear();
 
         this->lastChooseDeque->assign(refStringQue->begin(), refStringQue->end());

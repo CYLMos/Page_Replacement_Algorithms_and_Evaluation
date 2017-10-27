@@ -21,6 +21,9 @@ class EnhanceSC : public PRA_Interface<Page>
         EnhanceSC(TestRef_Interface*);
         virtual ~EnhanceSC();
 
+        // Implement getNewRefString
+        void getNewRefStrings() override;
+
         // Implement callOSEvent
         void callOSEvent() override;
 

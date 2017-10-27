@@ -33,7 +33,9 @@ MyOwnPRA::~MyOwnPRA(){
     if(this->refAlgo != nullptr){delete this->refAlgo;}
 }
 
-void MyOwnPRA::callOSEvent(){
+// Implement getNewRefString
+void MyOwnPRA::getNewRefStrings(){
+    // If refStringQue not null, clear it.
     if(this->refStringQue != nullptr){
         if(this->refStringQue->size() > 0){
             this->refStringQue->clear();
@@ -41,8 +43,11 @@ void MyOwnPRA::callOSEvent(){
         delete this->refStringQue;
     }
 
+    // Get new reference string.
     this->refStringQue = this->refAlgo->chooseReferenceAlgo(PRA_Interface<Page>::range, PRA_Interface<Page>::refStringQueSize);
+}
 
+void MyOwnPRA::callOSEvent(){
     this->interrupt++;
 }
 
@@ -90,6 +95,9 @@ void MyOwnPRA::pageFaultEvent(Page refString){
               Page dramPage = *it;
 
               if(dramPage.getRefString() == victimPage.getRefString()){
+                  if(dramPage.getDirtyBit()){
+                      this->writeDiskEvent();
+                  }
                   dramPage.setRefString(refString.getRefString());
                   dramPage.setDirtyBit(refString.getDirtyBit());
 
@@ -110,38 +118,4 @@ void MyOwnPRA::pageFaultEvent(Page refString){
 
 void MyOwnPRA::writeDiskEvent(){
     this->writeDisk++;
-}
-
-bool MyOwnPRA::findFunction(bool refBit, bool modBit){
-    bool doubleZeroFlag = false;
-    Page lastPage = this->dram->front();
-    Page nowPage;
-
-    while(nowPage.getRefString() != lastPage.getRefString()){
-        Page beginPage = this->dram->front();
-        this->dram->pop_front();
-        this->dram->push_back(beginPage);
-
-        std::deque<Page>::iterator it = this->dram->begin();
-        nowPage = *it;
-        if( nowPage.getRefBit() == refBit && nowPage.getDirtyBit() == modBit ){
-            doubleZeroFlag = true;
-
-            break;;
-        }
-    }
-
-    return doubleZeroFlag;
-}
-
-void MyOwnPRA::replaceVictim(Page page){
-    Page victimPage;
-    std::deque<Page>::iterator it = this->dram->begin();
-    victimPage = *it;
-
-    victimPage.setRefString(page.getRefString());
-    victimPage.setDirtyBit(page.getDirtyBit());
-    victimPage.setRefBit(page.getRefBit());
-
-    *it = victimPage;
 }

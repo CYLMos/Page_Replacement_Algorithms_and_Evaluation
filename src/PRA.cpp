@@ -35,7 +35,7 @@ void PRA::Run(){
         printf("\rrunTimes: %d", runTimes + 1);
         fflush(stdout);
 
-        this->algorithm->callOSEvent();
+        this->algorithm->getNewRefStrings();
 
         while(this->algorithm->getRefStringQue()->size() > 0){
             std::deque<Page>::iterator it = this->algorithm->getRefStringQue()->begin();
@@ -46,7 +46,10 @@ void PRA::Run(){
             for(std::deque<Page>::iterator subIt = this->algorithm->getDram()->begin(); subIt != this->algorithm->getDram()->end(); subIt++){
                 Page dramPage = *subIt;
                 if(page.getRefString() == dramPage.getRefString()){
-                    dramPage.setRefBit(true);
+                    if(!dramPage.getRefBit()){
+                        this->algorithm->callOSEvent();
+                        dramPage.setRefBit(true);
+                    }
                     *subIt = dramPage;
 
                     existFlag = true;
@@ -79,7 +82,10 @@ void PRA::Run(){
             double value = ((rand() % 100) + 1) * 0.01;
 
             if(value >= PRA_Interface<Page>::dirtyRate){
-                page.setDirtyBit(true);
+                if(!page.getDirtyBit()){
+                    this->algorithm->callOSEvent();
+                    page.setDirtyBit(true);
+                }
                 *it = page;
             }
         }
