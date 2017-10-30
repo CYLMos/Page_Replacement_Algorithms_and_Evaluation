@@ -28,9 +28,6 @@ class MyOwnPRA : public PRA_Interface<Page>
     protected:
 
     private:
-        bool findFunction(bool, bool);
-
-        void replaceVictim(Page);
 };
 
 #endif // MYOWNPRA_H

@@ -17,8 +17,8 @@ using namespace std;
 
 int main()
 {
-    TestRef_Interface* refAlgorithm = new Locality(1000);
-    PRA_Interface<Page>* algorithm = new EnhanceSC(refAlgorithm);
+    TestRef_Interface* refAlgorithm = new MyOwnRef(1000);
+    PRA_Interface<Page>* algorithm = new FIFO(refAlgorithm);
 
     int refStringNum;
 
