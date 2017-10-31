@@ -7,6 +7,14 @@
 #include <deque>
 #include <cstdlib>
 
+/**
+
+This class inhernets from TestRef_Interface.
+
+RandomRef is used to choose the new queue of reference strings about the OS.
+
+*/
+
 class RandomRef : public TestRef_Interface
 {
     public:

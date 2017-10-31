@@ -6,6 +6,14 @@
 
 #include <deque>
 
+/**
+
+This class inhernets from PRA_Interface.
+
+MyOwnPRA is used to do the operation about FIFO algorithm of the OS.
+
+**/
+
 class MyOwnPRA : public PRA_Interface<Page>
 {
     public:

@@ -9,7 +9,7 @@
 class TestRef_Interface
 {
     public:
-        /*
+        /**
          the class inherenting this class must implement this function
          */
 

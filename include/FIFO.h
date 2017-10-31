@@ -15,7 +15,7 @@
 
 This class inhernets from PRA_Interface.
 
-FIFO is used to do the operation about FIFO algorithm of ths OS.
+FIFO is used to do the operation about FIFO algorithm of the OS.
 
 **/
 

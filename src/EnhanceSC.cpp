@@ -80,10 +80,18 @@ void EnhanceSC::pageFaultEvent(Page refString){
         #endif // TEST
 
         if(!this->findZeroZero()){
+            /**
+            If not found, find (0 , 1).
+            */
             if(!this->findZeroOne()){
+                /**
+                If not found, find(0, 0) again.
+                */
                 if(!this->findZeroZero()){
+                    /**
+                    If not found, find (0, 1) again.
+                    */
                     this->findZeroOne();
-
 
                     this->replaceVictim(refString);
                 }
@@ -117,11 +125,6 @@ void EnhanceSC::pageFaultEvent(Page refString){
             }
             std::cout << std::endl;
         #endif // TEST
-
-
-        /**
-        Replace reference string
-        */
     }
     else{
             this->dram->push_back(refString);
@@ -135,14 +138,12 @@ void EnhanceSC::writeDiskEvent(){
     this->writeDisk++;
 }
 
+//Find (0, 0)
 bool EnhanceSC::findZeroZero(){
     bool doubleZeroFlag = false;
     Page lastPage = this->dram->front();
     Page nowPage;
 
-        /**
-        Find (0, 0) first.
-        */
     while(nowPage.getRefString() != lastPage.getRefString()){
         Page beginPage = this->dram->front();
         this->dram->pop_front();
@@ -160,15 +161,13 @@ bool EnhanceSC::findZeroZero(){
     return doubleZeroFlag;
 }
 
+//Find (0, 1)
 bool EnhanceSC::findZeroOne(){
     bool findFlag = false;
 
     Page lastPage = this->dram->front();
     Page nowPage;
 
-        /**
-        Find (0, 1)
-        */
     while(nowPage.getRefString() != lastPage.getRefString()){
         Page beginPage = this->dram->front();
         this->dram->pop_front();
@@ -196,6 +195,7 @@ bool EnhanceSC::findZeroOne(){
     return findFlag;
 }
 
+//Replace the victim.
 void EnhanceSC::replaceVictim(Page page){
     Page victimPage;
     std::deque<Page>::iterator it = this->dram->begin();
@@ -204,7 +204,7 @@ void EnhanceSC::replaceVictim(Page page){
     if(victimPage.getDirtyBit()){
         this->writeDiskEvent();
     }
-    //this->callOSEvent();
+
     victimPage.setRefString(page.getRefString());
     victimPage.setDirtyBit(page.getDirtyBit());
     victimPage.setRefBit(page.getRefBit());

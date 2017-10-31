@@ -2,15 +2,20 @@
 #include <cstdlib>
 #include <time.h>
 
+//#define TEST_MyOwnRef
+
+//Init
 MyOwnRef::MyOwnRef(int randSeed){
     this->randSeed = randSeed;
     this->lastChooseDeque = new std::deque<Page>();
 }
 
+//Release the memory
 MyOwnRef::~MyOwnRef(){
     delete this->lastChooseDeque;
 }
 
+// Implement the choose reserence string algo
 std::deque<Page>* MyOwnRef::chooseReferenceAlgo(int rang, int length){
     std::deque<Page>* refStringQue = new std::deque<Page>();
 
@@ -64,6 +69,14 @@ std::deque<Page>* MyOwnRef::chooseReferenceAlgo(int rang, int length){
     }
 
     this->randSeed = rand() % time(NULL);
+
+    #ifdef TEST_MyOwnRef
+    for(std::deque<Page>::iterator it = this->lastChooseDeque->begin(); it != this->lastChooseDeque->end(); it++){
+        Page page = *it;
+        std::cout << " " << page.getRefString();
+    }
+    std::cout << std::endl;
+    #endif
 
     return refStringQue;
 }

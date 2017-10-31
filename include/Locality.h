@@ -6,13 +6,21 @@
 
 #include <deque>
 
+/**
+
+This class inhernets from TestRef_Interface.
+
+Locality is used to choose the new queue of reference strings about the OS.
+
+*/
+
 class Locality : public TestRef_Interface
 {
     public:
         Locality(int);
         virtual ~Locality();
 
-        // Implement the choose reserence string algo.
+        // Implement the choose reserence string algo
         std::deque<Page>* chooseReferenceAlgo(int rang, int length) override;
 
     protected:

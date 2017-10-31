@@ -5,15 +5,20 @@
 #include <time.h>
 #include <iostream>
 
+//#define TEST_Locality
+
+//Init
 Locality::Locality(int randSeed){
     this->randSeed = randSeed;
     this->lastChooseDeque = new std::deque<Page>();
 }
 
+//Release the memory
 Locality::~Locality(){
     delete this->lastChooseDeque;
 }
 
+// Implement the choose reserence string algo
 std::deque<Page>* Locality::chooseReferenceAlgo(int rang, int length){
     std::deque<Page>* refStringQue = new std::deque<Page>();
 
@@ -73,11 +78,13 @@ std::deque<Page>* Locality::chooseReferenceAlgo(int rang, int length){
 
     this->randSeed = rand() % time(NULL);
 
-    /*for(std::deque<Page>::iterator it = this->lastChooseDeque->begin(); it != this->lastChooseDeque->end(); it++){
+    #ifdef TEST_Locality
+    for(std::deque<Page>::iterator it = this->lastChooseDeque->begin(); it != this->lastChooseDeque->end(); it++){
         Page page = *it;
         std::cout << " " << page.getRefString();
     }
-    std::cout << std::endl;*/
+    std::cout << std::endl;
+    #endif
 
     return refStringQue;
 }

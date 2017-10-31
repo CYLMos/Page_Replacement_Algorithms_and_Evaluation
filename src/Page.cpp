@@ -22,26 +22,32 @@ Page::~Page(){
     //dtor
 }
 
+// set reference string
 void Page::setRefString(int refString){
     this->refString = refString;
 }
 
+// get reference string
 void Page::setDirtyBit(bool dirtyBit){
     this->dirtyBit = dirtyBit;
 }
 
+// set dirty bit
 int Page::getRefString(){
     return this->refString;
 }
 
+// get dirty bit
 bool Page::getDirtyBit(){
     return this->dirtyBit;
 }
 
+// set reference bit
 void Page::setRefBit(bool refBit){
     this->refBit = refBit;
 }
 
+// get reference bit
 bool Page::getRefBit(){
     return this->refBit;
 }

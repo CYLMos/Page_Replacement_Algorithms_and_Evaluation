@@ -47,68 +47,79 @@ void MyOwnPRA::getNewRefStrings(){
     this->refStringQue = this->refAlgo->chooseReferenceAlgo(PRA_Interface<Page>::range, PRA_Interface<Page>::refStringQueSize);
 }
 
+// Implement callOSEvent
 void MyOwnPRA::callOSEvent(){
     this->interrupt++;
 }
 
+// Implement pageFaultEvent
 void MyOwnPRA::pageFaultEvent(Page refString){
     if(this->dram->size() >= (unsigned)PRA_Interface<Page>::dramSize){
-         std::deque<Page>* tempDeque = new std::deque<Page>();
-         tempDeque->assign(this->dram->begin(), this->dram->end());
+        /**
+        Copy dram to tempDeque.
+        Only change tempDeque in the after operation.
+        */
+        std::deque<Page>* tempDeque = new std::deque<Page>();
+        tempDeque->assign(this->dram->begin(), this->dram->end());
 
-         bool stopFlag = false;
-         int breakNum = tempDeque->size() / 4;
-         for(std::deque<Page>::reverse_iterator rit = this->refStringQue_History->rbegin(); rit != this->refStringQue_History->rend(); rit++){
-             Page page = *rit;
+        bool stopFlag = false;
+        // Limit the number of the rest of elements is 1/4 with origin size.
+        int breakNum = tempDeque->size() / 4;
+        for(std::deque<Page>::reverse_iterator rit = this->refStringQue_History->rbegin(); rit != this->refStringQue_History->rend(); rit++){
+            Page page = *rit;
 
-             for(std::deque<Page>::iterator it = tempDeque->begin(); it!= tempDeque->end(); it++){
-                 Page dramPage = *it;
-                 if(page.getRefString() == dramPage.getRefString() && tempDeque->size() > 1){
-                     tempDeque->erase(it);
+            for(std::deque<Page>::iterator it = tempDeque->begin(); it!= tempDeque->end(); it++){
+                Page dramPage = *it;
+                if(page.getRefString() == dramPage.getRefString() && tempDeque->size() > 1){
+                    tempDeque->erase(it);
 
-                     break;
-                 }
-                 else if(tempDeque->size() == breakNum){
-                     stopFlag = true;
+                    break;
+                }
+                else if(tempDeque->size() == breakNum){
+                    stopFlag = true;
 
-                     break;
-                 }
-              }
-              if(stopFlag){break;}
-          }
+                    break;
+                }
+            }
+            if(stopFlag){break;}
+        }
 
-          if(stopFlag){
-              srand(time(NULL));
-              int counter = ( rand() % breakNum) + 1;
+        /**
+        If stopFlag is true,then pick one element to be the victim in that 1/4 reference strings in the frame.
+        else will pick the first to be the victim in the rest of elements in the frame.
+        */
+        if(stopFlag){
+            srand(time(NULL));
+            int counter = ( rand() % breakNum) + 1;
 
-              while(counter != 0){
-                  Page temp = this->dram->front();
-                  this->dram->pop_front();
-                  this->dram->push_back(temp);
+            while(counter != 0){
+                Page temp = this->dram->front();
+                this->dram->pop_front();
+                this->dram->push_back(temp);
 
-                  counter--;
-              }
-          }
+                counter--;
+            }
+        }
 
-          Page victimPage = tempDeque->front();
-          for(std::deque<Page>::iterator it = this->dram->begin(); it!= this->dram->end(); it++){
-              Page dramPage = *it;
+        Page victimPage = tempDeque->front();
+        for(std::deque<Page>::iterator it = this->dram->begin(); it!= this->dram->end(); it++){
+            Page dramPage = *it;
 
-              if(dramPage.getRefString() == victimPage.getRefString()){
-                  if(dramPage.getDirtyBit()){
-                      this->writeDiskEvent();
-                  }
-                  dramPage.setRefString(refString.getRefString());
-                  dramPage.setDirtyBit(refString.getDirtyBit());
+            if(dramPage.getRefString() == victimPage.getRefString()){
+                if(dramPage.getDirtyBit()){
+                    this->writeDiskEvent();
+                }
+                dramPage.setRefString(refString.getRefString());
+                dramPage.setDirtyBit(refString.getDirtyBit());
 
-                  *it = dramPage;
-              }
-          }
+                *it = dramPage;
+            }
+        }
 
-         tempDeque->clear();
-         delete tempDeque;
-     }
-     else{
+        tempDeque->clear();
+        delete tempDeque;
+    }
+    else{
         this->dram->push_back(refString);
     }
 
@@ -116,6 +127,7 @@ void MyOwnPRA::pageFaultEvent(Page refString){
     this->pageFault++;
 }
 
+// Implement writeDskEvent
 void MyOwnPRA::writeDiskEvent(){
     this->writeDisk++;
 }

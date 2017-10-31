@@ -19,18 +19,19 @@ class PRA
 
         virtual ~PRA();
 
+        // set the algorithm about page replacement algorithm
         void setAlgorithm(PRA_Interface<Page>*);
 
+        //get the algorithm about page replacement algorithm
         PRA_Interface<Page>* getAlgorithm();
 
-        void setRefAlgorithm(TestRef_Interface*);
-
-        TestRef_Interface* getRefAlgorithm();
-
+        // set the run times
         void setRefTimes(int);
 
+        // get the run times
         int getRefTimes();
 
+        // start
         void Run();
 
     protected:

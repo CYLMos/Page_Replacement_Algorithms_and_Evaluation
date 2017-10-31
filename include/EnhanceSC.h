@@ -10,7 +10,7 @@
 
 This class inhernets from PRA_Interface.
 
-EnhanceSC is used to do the operation about the enhance second chance algorithm of ths OS.
+EnhanceSC is used to do the operation about the enhance second chance algorithm of the OS.
 
 **/
 
@@ -36,10 +36,13 @@ class EnhanceSC : public PRA_Interface<Page>
     protected:
 
     private:
+        //Find (0, 0)
         bool findZeroZero();
 
+        //Find (0, 1)
         bool findZeroOne();
 
+        //Replace the victim.
         void replaceVictim(Page);
 };
 
